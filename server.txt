@@ -1,0 +1,67 @@
+// Vamos falar de coisa basica da programação em JavaScript
+
+// Variaveis ??
+
+const mensagem = "Oi, Como vai?" // string
+const number = 2.5 // number
+
+function soma(numero1, numero2) {
+    //const somar = numero1 + numero2
+    return numero1 + numero2
+
+    //return somar
+    //const numero1 = 10
+    //const numero2 = 20
+    //console.log(numero1 + numero2) 
+}
+
+//console.log(mensagem)
+//console.log(number)
+const somar = soma(10 , 20)
+console.log(soma(5 ,5))
+
+console.log(somar)
+
+//
+
+
+// Vamos falar de coisa basica da programação em JavaScript
+pack.json
+npm init -y
+
+--------------------
+pacote express
+
+npm i express
+
+
+------------------------
+pacote nodemon
+
+npm i nodemon
+
+"start": "nodemon server.js"
+
+----------------------------
+const xicara = {
+    cor: "branco",
+    tamanho: 10,
+    estaSujo(simNao) {
+        console.log(simNao)
+
+    }
+}
+
+console.log(xicara.estaSujo("sim"))
+
+const cor = "preto"
+const tamanho = 5
+function sujo(esta){
+    console.log(esta)
+}
+
+const xicara2 = {
+    cor,
+    tamanho,
+    sujo
+}
