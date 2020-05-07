@@ -42,6 +42,14 @@ npm i nodemon
 
 "start": "nodemon server.js"
 
+"start": "node server.js",
+    "dev": "nodemon server.js"
+
+--------------------------------------
+
+paconte npm i nunjucks
+
+
 ----------------------------
 const xicara = {
     cor: "branco",
