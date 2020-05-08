@@ -3,42 +3,14 @@ const express = require("express")
 
 const server = express()
 
-
-const ideas = [
-    {
-        img: "https://image.flaticon.com/icons/svg/2728/2728995.svg",
-        title:"Curso de Programação",
-        category:"Estudo",
-        description:"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores similique impedit soluta",
-        url:"https://rocketseat.com.br"
-    },
-    {
-        img: "https://image.flaticon.com/icons/svg/2904/2904531.svg",
-        title:"Curso de Programação",
-        category:"Estudo",
-        description:"voluptatibus quae pariatur, eaque sed corporis explicabo blanditiis quis voluptatum? Iusto est veritatis in quasi repellendus.",
-        url:"https://rocketseat.com.br"
-    },
-    {
-        img: "https://image.flaticon.com/icons/svg/2729/2729027.svg",
-        title:"Meditação",
-        category:"Estudo",
-        description:"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores similique impedit soluta",
-        url:"https://rocketseat.com.br"
-    },
-    {
-        img: "https://image.flaticon.com/icons/svg/2728/2728995.svg",
-        title:"Curso de Programação",
-        category:"Estudo",
-        description:"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores similique impedit soluta",
-        url:"https://rocketseat.com.br"
-    },
-]
+const db = require("./db")
 
 // configurar arquivo estaticos (css, scripts, imagem)
 
 server.use(express.static("public"))
 
+//habilitar o uso de req.bady
+server.use(express.urlencoded({ extended: true }))
 
 // configuração do nunjucks
 const nunjucks = require("nunjucks")
@@ -53,7 +25,13 @@ nunjucks.configure("views", {
 // e captureo o pedido do cliente
 server.get("/", function(req, res){
 
-    const reversedIdea = [...ideas].reverse()
+     db.all(`SELECT * FROM ideas`, function(err, rows) {
+        if (err) {
+            console.log(err)
+            return res.send("Erro no banco de dados!")
+        } 
+
+        const reversedIdea = [...rows].reverse()
 
     let lastIdea = []
     for (let idea of reversedIdea) {
@@ -61,17 +39,60 @@ server.get("/", function(req, res){
             lastIdea.push(idea)
         }
     }
-
-
+    
     return res.render("index.html", { ideas: lastIdea })
+    })
+
+
+    
 })
 
 server.get("/ideias", function(req, res){
 
-    const reversedIdea = [...ideas].reverse()
 
-    return res.render("indeias.html", {ideas: reversedIdea})
+    db.all(`SELECT * FROM ideas`, function(err, rows) {
+        if (err) {
+            console.log(err)
+            return res.send("Erro no banco de dados!")
+        } 
+
+        const reversedIdea = [...rows].reverse()
+
+        return res.render("indeias.html", {ideas: reversedIdea})
+
+    })
+
+    
 })
 
+server.post("/", function(req, res) {
+         const query = `
+            INSERT INTO ideas (
+                image,
+                title,
+                category,
+                description,
+                link
+
+            ) VALUES (?,?,?,?,?);
+    `
+
+    const values = [
+        req.body.image,
+        req.body.title,
+        req.body.category,
+        req.body.description,
+        req.body.link,
+    ]
+    db.run(query, values, function(err){
+        if (err) {
+            console.log(err)
+            return res.send("Erro no banco de dados!")
+        } 
+
+        return res.redirect("/ideias")
+
+    })
+})
 // liguei meu servidor na porta 3000
 server.listen(3000)
